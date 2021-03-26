@@ -50,9 +50,20 @@ def get_search_links():
     “https://www.goodreads.com/book/show/kdkd".
 
     """
+    web_url = 'https://www.goodreads.com/search?q=fantasy&qid=NwUsLiA2Nc'
+    r = requests.get(web_url)
+    soup = BeautifulSoup(r.content, 'html.parser')
 
-    pass
-
+    url_list = []
+    table = soup.find('table', class_= 'tableList')
+    x = table.find_all('tr')
+    for row in x[:10]: 
+        info = row.find_all('td')
+        url = info[0].find('a')
+        link = "https://www.goodreads.com" + str(url['href'])
+        url_list.append(link)
+    return url_list
+        
 
 def get_book_summary(book_url):
     """
@@ -197,6 +208,6 @@ def extra_credit(filepath):
 if __name__ == '__main__':
     # print(extra_credit("extra_credit.htm"))
     # unittest.main(verbosity=2)
-    get_titles_from_search_results('search_results.htm')
+    get_search_links()
 
 
