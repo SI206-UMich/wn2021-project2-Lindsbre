@@ -106,7 +106,19 @@ def summarize_best_books(filepath):
     ("Fiction", "The Testaments (The Handmaid's Tale, #2)", "https://www.goodreads.com/choiceawards/best-fiction-books-2020") 
     to your list of tuples.
     """
-    pass
+    filename = filepath.split('/')[-1]
+
+    with open(filename) as f: 
+        tuple_list = []
+        soup = BeautifulSoup(f, 'html.parser')
+        cat = soup.find_all('div', class_ = "category clearFix")
+        for book in cat: 
+            category = book.find('h4', class_ = "category__copy")   
+            url = book.find('a')
+            title =  book.find('img', class_ = "category__winnerImage")
+            tup = (category.text.strip(), title['alt'], url['href'])
+            tuple_list.append(tup)
+        return tuple_list
 
 
 def write_csv(data, filename):
@@ -221,6 +233,7 @@ def extra_credit(filepath):
 if __name__ == '__main__':
     # print(extra_credit("extra_credit.htm"))
     # unittest.main(verbosity=2)
+    summarize_best_books('/Users/lindsaybrenner/Downloads/SI206/Project2/wn2021-project2-Lindsbre/best_books_2020.htm')
     
 
 
